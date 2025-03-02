@@ -8,13 +8,13 @@ import java.util.PriorityQueue;
 import java.util.UUID;
 
 public class ParkingSpotFor2Wheelers implements ParkingSpot{
-    Boolean isEmpty;
+    boolean isEmpty = false;
     int price;
     Map<Integer,String> availableSpot= new HashMap<>();
     List<Integer> takenPlaces = new ArrayList<>();
     PriorityQueue<Integer> pq = new PriorityQueue<>();
 
-    public Boolean getEmpty() {
+    public boolean getEmpty() {
         return isEmpty;
     }
 
@@ -32,9 +32,13 @@ public class ParkingSpotFor2Wheelers implements ParkingSpot{
 
     @Override
     public String findParkingSpotForVehicle(Vehicle vehicle) {
+        if(pq.isEmpty())  {
+            System.out.println("queue is empty");
+            return "NA";
+        }
         takenPlaces.add(pq.peek());
         if(pq.size()==1) {
-            setEmpty(false);
+            setEmpty(true);
         }
         return availableSpot.get(pq.poll());
     }
@@ -47,4 +51,7 @@ public class ParkingSpotFor2Wheelers implements ParkingSpot{
         }
     }
 
+    public boolean isEmpty() {
+        return isEmpty;
+    }
 }

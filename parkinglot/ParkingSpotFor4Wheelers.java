@@ -10,13 +10,13 @@ import java.util.UUID;
 public class ParkingSpotFor4Wheelers implements ParkingSpot{
 
 
-    Boolean isEmpty;
+    boolean isEmpty=false;
 
     Map<Integer,String> availableSpot= new HashMap<>();
     List<Integer> takenPlaces = new ArrayList<>();
     PriorityQueue<Integer> pq = new PriorityQueue<>();
 
-    public Boolean getEmpty() {
+    public boolean getEmpty() {
         return isEmpty;
     }
 
@@ -28,7 +28,7 @@ public class ParkingSpotFor4Wheelers implements ParkingSpot{
     public String findParkingSpotForVehicle(Vehicle vehicle) {
         takenPlaces.add(pq.peek());
         if(pq.size()==1) {
-            setEmpty(false);
+            setEmpty(true);
         }
         return availableSpot.get(pq.poll());
     }

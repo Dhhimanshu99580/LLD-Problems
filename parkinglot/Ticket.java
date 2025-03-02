@@ -6,8 +6,8 @@ import java.time.LocalDateTime;
 
 public class Ticket {
     LocalDateTime entryTime;
-    int ticketId;
-    ParkingSpotFor2Wheelers parkingSpotFor2Wheelers;
+    double ticketId;
+    String parkingSpotFor2Wheelers;
 
     public LocalDateTime getEntryTime() {
         return entryTime;
@@ -17,19 +17,27 @@ public class Ticket {
         this.entryTime = entryTime;
     }
 
-    public int getTicketId() {
+    public double getTicketId() {
         return ticketId;
     }
 
-    public void setTicketId(int ticketId) {
+    public void setTicketId(double ticketId) {
         this.ticketId = ticketId;
     }
 
-    public ParkingSpotFor2Wheelers getParkingSpot() {
+    public String getParkingSpot() {
         return parkingSpotFor2Wheelers;
     }
 
-    public void setParkingSpot(ParkingSpotFor2Wheelers parkingSpotFor2Wheelers) {
+    public void setParkingSpot(String parkingSpotFor2Wheelers) {
         this.parkingSpotFor2Wheelers = parkingSpotFor2Wheelers;
+    }
+
+    public Ticket prepareTicket(String parkingSpot) {
+        Ticket ticket = new Ticket();
+        ticket.setEntryTime(LocalDateTime.now());
+        ticket.setTicketId(Math.random());
+        ticket.setParkingSpot(parkingSpot);
+        return ticket;
     }
 }
