@@ -1,65 +1,67 @@
 package behaviourPattern;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public interface Observer {
-    public void update(String message);
+/********* Observer Pattern **********/
+
+interface Observer {
+    void update(String message);
 }
 
-public class EmailObserver implements Observer {
+class EmailObserver implements Observer {
     @Override
     public void update(String message) {
-        // logic to send email notification
+        System.out.println("Email notification: " + message);
     }
 }
 
-public class SmsObserver implements Observer {
+class SmsObserver implements Observer {
     @Override
     public void update(String message) {
-        // logic to send sms notification
+        System.out.println("SMS notification: " + message);
     }
 }
 
-// Interface for event source
-public interface Source{
-    public void addObserver(Observer observer);
-    public void removeObserver(Observer observer);
-    public void notifyObserver(String message);
-    public void processSettlementEvent(String event);
+interface Source {
+    void addObserver(Observer observer);
+    void removeObserver(Observer observer);
+    void notifyObserver(String message);
+    void processSettlementEvent(String event);
 }
 
-public class SettlementEventSource implements Source {
+class SettlementEventSource implements Source {
     private List<Observer> observers = new ArrayList<>();
-    public SettlementEventSource() {
-    }
+
+    @Override
     public void addObserver(Observer observer) {
         observers.add(observer);
     }
+
+    @Override
     public void removeObserver(Observer observer) {
         observers.remove(observer);
     }
 
     @Override
     public void notifyObserver(String message) {
-        for(Observer observer : observers) {
+        for (Observer observer : observers) {
             observer.update(message);
         }
     }
+
     @Override
     public void processSettlementEvent(String event) {
-        // logic to process settlement event
-        // after processing the event, notify the observers
+        // process the event, then notify all observers
         notifyObserver(event);
     }
 }
 
-public class Client {
+class ObserverClient {
     public static void main(String[] args) {
-        SettlementEventSource settlementEventSource = new SettlementEventSource();
-        EmailObserver emailObserver = new EmailObserver();
-        SmsObserver smsObserver = new SmsObserver();
-        settlementEventSource.addObserver(emailObserver);
-        settlementEventSource.addObserver(smsObserver);
-        settlementEventSource.processSettlementEvent("Settlement event processed");
+        SettlementEventSource source = new SettlementEventSource();
+        source.addObserver(new EmailObserver());
+        source.addObserver(new SmsObserver());
+        source.processSettlementEvent("Settlement event processed");
     }
 }

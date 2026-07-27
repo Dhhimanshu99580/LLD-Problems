@@ -1,101 +1,65 @@
 package behaviourPattern;
 
-//
+import java.util.HashMap;
+import java.util.Map;
+
 /********* Strategy Pattern **********/
-public interface ReportStrategy {
-    public void generateReport(RequiredPojoForReportGeneration requiredPojoForReportGeneration);
+
+interface ReportStrategy {
+    void generateReport(RequiredPojoForReportGeneration pojo);
 }
 
-// classes Implementing this
-public class PdfReportStrategy implements ReportStrategy {
+class RequiredPojoForReportGeneration {
+    // fields representing report data would go here
+}
+
+class PdfReportStrategy implements ReportStrategy {
     @Override
-    public void generateReport(RequiredPojoForReportGeneration requiredPojoForReportGeneration) {
-        // logic to generate pdf report
+    public void generateReport(RequiredPojoForReportGeneration pojo) {
+        System.out.println("Generating PDF report...");
     }
 }
 
-public class ExcelReportStrategy implements ReportStrategy {
+class ExcelReportStrategy implements ReportStrategy {
     @Override
-    public void generateReport(RequiredPojoForReportGeneration requiredPojoForReportGeneration) {
-        // logic to generate excel report
+    public void generateReport(RequiredPojoForReportGeneration pojo) {
+        System.out.println("Generating Excel report...");
     }
 }
 
-public class CsvReportStrategy implements ReportStrategy {
+class CsvReportStrategy implements ReportStrategy {
     @Override
-    public void generateReport(RequiredPojoForReportGeneration requiredPojoForReportGeneration) {
-        // logic to generate csv report
+    public void generateReport(RequiredPojoForReportGeneration pojo) {
+        System.out.println("Generating CSV report...");
     }
 }
 
-// Context class from where we will call the strategy
-public class ReportContext{
+// Context class — holds the strategy and delegates to it
+class ReportContext {
     private ReportStrategy reportStrategy;
-    public ReportContext() {
-    }
+
     public ReportContext(ReportStrategy reportStrategy) {
         this.reportStrategy = reportStrategy;
     }
-    public void generateReport(RequiredPojoForReportGeneration requiredPojoForReportGeneration) {
-        reportStrategy.generateReport(requiredPojoForReportGeneration);
+
+    public void generateReport(RequiredPojoForReportGeneration pojo) {
+        reportStrategy.generateReport(pojo);
     }
 }
 
-// Client class to test the strategy pattern
-public class Client {package behaviourPattern;
+// Client — uses a map to pick strategy at runtime (factory-style)
+class Client {
+    private static final Map<String, ReportStrategy> reportStrategyMap = new HashMap<>();
 
-//
-    /********* Strategy Pattern **********/
-    public interface ReportStrategy {
-        public void generateReport(RequiredPojoForReportGeneration requiredPojoForReportGeneration);
+    static {
+        reportStrategyMap.put("pdf",   new PdfReportStrategy());
+        reportStrategyMap.put("excel", new ExcelReportStrategy());
+        reportStrategyMap.put("csv",   new CsvReportStrategy());
     }
 
-    // classes Implementing this
-    public class PdfReportStrategy implements behaviourPattern.ReportStrategy {
-        @Override
-        public void generateReport(RequiredPojoForReportGeneration requiredPojoForReportGeneration) {
-            // logic to generate pdf report
-        }
-    }
-
-    public class ExcelReportStrategy implements behaviourPattern.ReportStrategy {
-        @Override
-        public void generateReport(RequiredPojoForReportGeneration requiredPojoForReportGeneration) {
-            // logic to generate excel report
-        }
-    }
-
-    public class CsvReportStrategy implements behaviourPattern.ReportStrategy {
-        @Override
-        public void generateReport(RequiredPojoForReportGeneration requiredPojoForReportGeneration) {
-            // logic to generate csv report
-        }
-    }
-
-    // Context class from where we will call the strategy
-    public class ReportContext{
-        private behaviourPattern.ReportStrategy reportStrategy;
-        public ReportContext(behaviourPattern.ReportStrategy reportStrategy) {
-            this.reportStrategy = reportStrategy;
-        }
-        public void generateReport(RequiredPojoForReportGeneration requiredPojoForReportGeneration) {
-            reportStrategy.generateReport(requiredPojoForReportGeneration);
-        }
-    }
-
-    // Client class to test the strategy pattern
-    public class Client {
-        // this is kind of factory method to get the strategy based on the request
-        private static final Map<String,ReportStrategy> reportStrategyMap = new HashMap<>();
-        static {
-            reportStrategyMap.put("pdf", new PdfReportStrategy());
-            reportStrategyMap.put("excel", new ExcelReportStrategy());
-            reportStrategyMap.put("csv", new CsvReportStrategy());
-        }
-        public static void main(String[] args) {
-            String reportType = "pdf"; // comes from request
-            ReportContext reportContext = new ReportContext(reportStrategyMap.get(reportType));
-            reportContext.generateReport(new RequiredPojoForReportGeneration());
-        }
+    public static void main(String[] args) {
+        String reportType = "pdf"; // comes from request
+        ReportContext reportContext = new ReportContext(reportStrategyMap.get(reportType));
+        reportContext.generateReport(new RequiredPojoForReportGeneration());
     }
 }
